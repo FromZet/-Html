@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проект "Котята"</title>
+    <style>
+        body {
+            animation: changeBackground 10s linear infinite alternate;
+            background: linear-gradient(to right, #ffccff, #cc99ff, #ff6666, #99ff99, #ff6666, #cc99ff);
+            background-size: 600% 100%;
+        }
+
+        @keyframes changeBackground {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .rectangle {
+            width: 400px;
+            height: 600px;
+            background-color: rgba(169, 169, 169, 0.5);
+            border-radius: 25px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        .chat {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            clear: both;
+            color: #fff;
+        }
+
+        .chat.left {
+            background-color: #fff;
+            color: #000;
+            float: left;
+        }
+
+        .chat.right {
+            background-color: #0084ff;
+            color: #fff;
+            float: right;
+        }
+
+        .blue-box {
+            background-color: #0084ff;
+            color: #fff;
+        }
+
+        .white-box {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .message-input {
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            bottom: 10px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .message-input textarea {
+            width: 20%;
+            height: 15px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message-input button {
+            width: 10%;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #0084ff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Изменяем цвет полосы прокрутки справа на прозрачный */
+        .rectangle::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .rectangle::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.5); /* Прозрачный цвет */
+            border-radius: 10px;
+        }
+
+        /* Стили для экранов шириной менее 600px */
+        @media screen and (max-width: 600px) {
+            .rectangle {
+                width: 100%;
+                height: auto;
+            }
+
+            .message-input textarea {
+                width: 80%;
+            }
+
+            .message-input button {
+                width: 20%;
+            }
+
+            /* Другие стили для маленьких экранов */
+            /* ... */
+        }
+        #toggleEmojiButton {
+            background-color: transparent; /* Прозрачный фон */
+            border: none; /* Убираем границу */
+            font-size: 24px; /* Размер шрифта */
+            cursor: pointer;
+            width: 40px; /* Устанавливаем ширину кнопки */
+            height: 40px; /* Устанавливаем высоту кнопки */
+            position: absolute; /* Перемещение в абсолютное положение */
+            top: 0; /* Расстояние сверху */
+            left: 0; /* Расстояние слева */
+        }
+    </style>
+</head>
+<body>
+<div class="rectangle" id="chatContainer">
+    <!-- Пример сообщений в чате с эмодзи котятами -->
+    <div class="chat left white-box">
+        <p><strong>🐱🐾:</strong> Привет! Есть интересные новости?</p>
+    </div>
+    <div class="chat right blue-box">
+        <p><strong>🐾🐱:</strong> Да, у нас есть отличные результаты в последнем квартале!</p>
+    </div>
+    <div class="chat left white-box">
+        <p><strong>🐱🐾:</strong> Отлично! Давайте обсудим их подробности на ближайшей встрече.</p>
+    </div>
+    <div class="chat right blue-box">
+        <p><strong>🐾🐱:</strong> Конечно, я приготовлю презентацию.</p>
+    </div>
+</div>
+<!-- Область для набора сообщения внутри серого прямоугольника -->
+<div class="message-input">
+    <div class="input-container">
+        <textarea id="userMessage" placeholder="Введите ваше сообщение" aria-label="Поле для ввода сообщения" onkeydown="handleEnter(event)" style="resize: none;"></textarea>
+        <button onclick="sendMessage()" aria-label="Отправить сообщение">Отправить</button>
+    </div>
+</div>
+<!-- Перемещенная кнопка с эмодзи -->
+<button id="toggleEmojiButton" aria-label="Изменить эмодзи">🌙</button>
+<script>
+    function handleEnter(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+
+    function sendMessage() {
+        var userMessage = document.getElementById("userMessage").value;
+        if (userMessage.trim() === "") {
+            return;
+        }
+        var chatContainer = document.getElementById("chatContainer");
+        var chatMessage = document.createElement("div");
+        chatMessage.className = "chat right blue-box";
+        chatMessage.innerHTML = "<p><strong>🐾🐱:</strong> " + userMessage + "</p>";
+        chatContainer.appendChild(chatMessage);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        document.getElementById("userMessage").value = "";
+    }
+
+    // Добавленный код для изменения эмодзи
+    var currentEmoji = "🌙";
+var toggleEmojiButton = document.getElementById("toggleEmojiButton");
+toggleEmojiButton.addEventListener("click", function () {
+    if (currentEmoji === "🌙") {
+        currentEmoji = "☀️"; // Эмодзи солнца
+        activateThemeC(); // Активируем "Тема С"
+    } else {
+        currentEmoji = "🌙"; // Эмодзи луны
+        activateThemeDefault(); // Возвращаемся к "Исходник"
+    }
+    toggleEmojiButton.textContent = currentEmoji;
+});
+
+function activateThemeC() {
+    var themeCStyles = `
+        animation: changeBackground 10s linear infinite alternate;
+        background: linear-gradient(to right, #333333, #666666, #999999, #666666, #333333);
+        background-size: 600% 100%;
+    `;
+
+    document.documentElement.style = themeCStyles;
+}
+
+function activateThemeDefault() {
+    var defaultStyles = `
+        animation: changeBackground 10s linear infinite alternate;
+        background: linear-gradient(to right, #ffccff, #cc99ff, #ff6666, #99ff99, #ff6666, #cc99ff);
+        background-size: 600% 100%;
+    `;
+
+    document.documentElement.style = defaultStyles;
+}
+</script>
+</body>
+</html>
