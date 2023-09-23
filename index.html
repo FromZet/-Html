@@ -137,19 +137,7 @@
 </head>
 <body>
 <div class="rectangle" id="chatContainer">
-    <!-- Пример сообщений в чате с эмодзи котятами -->
-    <div class="chat left white-box">
-        <p><strong>🐱🐾:</strong> Привет! Есть интересные новости?</p>
-    </div>
-    <div class="chat right blue-box">
-        <p><strong>🐾🐱:</strong> Да, у нас есть отличные результаты в последнем квартале!</p>
-    </div>
-    <div class="chat left white-box">
-        <p><strong>🐱🐾:</strong> Отлично! Давайте обсудим их подробности на ближайшей встрече.</p>
-    </div>
-    <div class="chat right blue-box">
-        <p><strong>🐾🐱:</strong> Конечно, я приготовлю презентацию.</p>
-    </div>
+   
 </div>
 <!-- Область для набора сообщения внутри серого прямоугольника -->
 <div class="message-input">
@@ -167,20 +155,51 @@
             sendMessage();
         }
     }
+    
+    function generateBotResponse(userMessage) {
+    userMessage = userMessage.toLowerCase(); // Приводим сообщение пользователя к нижнему регистру
 
-    function sendMessage() {
-        var userMessage = document.getElementById("userMessage").value;
-        if (userMessage.trim() === "") {
-            return;
-        }
-        var chatContainer = document.getElementById("chatContainer");
-        var chatMessage = document.createElement("div");
-        chatMessage.className = "chat right blue-box";
-        chatMessage.innerHTML = "<p><strong>🐾🐱:</strong> " + userMessage + "</p>";
-        chatContainer.appendChild(chatMessage);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        document.getElementById("userMessage").value = "";
+    if (userMessage.includes("привет")) {
+        return "Здравствуйте!";
+    } else if (userMessage.includes("как дела")) {
+        return "У меня всегда хорошо! А у вас?";
+    } else if (userMessage.includes("хорошо")) {
+        return "Это замечательно!";
+    } else if (userMessage.includes("плохо")) {
+        return "Не грустите! Все наладится.";
     }
+
+    // Если не найдено ключевых слов для ответа, возвращаем пустую строку
+    return "";
+
+
+    // Если не найдено ключевых слов для ответа, возвращаем пустую строку
+    return "";
+}
+    function sendMessage() {
+    var userMessage = document.getElementById("userMessage").value;
+    if (userMessage.trim() === "") {
+        return;
+    }
+
+    var chatContainer = document.getElementById("chatContainer");
+    var chatMessage = document.createElement("div");
+    chatMessage.className = "chat right blue-box";
+    chatMessage.innerHTML = "<p><strong>🐾🐶:</strong> " + userMessage + "</p>";
+    chatContainer.appendChild(chatMessage);
+
+    // Генерируем ответ собеседника
+    var botResponse = generateBotResponse(userMessage);
+    if (botResponse !== "") {
+        var botMessage = document.createElement("div");
+        botMessage.className = "chat left white-box";
+        botMessage.innerHTML = "<p><strong>😸🐾:</strong> " + botResponse + "</p>";
+        chatContainer.appendChild(botMessage);
+    }
+
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    document.getElementById("userMessage").value = "";
+}
 
     // Добавленный код для изменения эмодзи
     var currentEmoji = "🌙";
@@ -215,6 +234,7 @@ function activateThemeDefault() {
 
     document.documentElement.style = defaultStyles;
 }
+
 </script>
 </body>
 </html>
